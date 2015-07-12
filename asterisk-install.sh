@@ -46,6 +46,20 @@ if [ ! -d "/usr/src/linux-rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y" ]; 
   if [ -f "/usr/src/rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y.zip" ]; then
     rm -f /usr/src/rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y.zip
   fi
+  
+  if [ -d "/usr/src/linux-rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y" ]; then
+    echo "Error: could not find the kernel source path"
+    exit 1
+  fi
+  
+  export KERNEL_SRC=/usr/src/linux-rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y
+fi
+
+cd /usr/src/linux-rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y
+make mrproper
+if [ $? -ne 0 ]; then
+  echo "Error: failed to run ' make mrproper'"
+  exit 1
 fi
 
 #-------------------------------------------------#
