@@ -28,7 +28,7 @@ fi
 
 # Unzip
 cd /usr/src
-tar -zxvf rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y.zip
+tar -zxvf rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y.tar.gz
 if [ $? -ne 0 ]; then
   if [ -d "/usr/src/linux-rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y" ]; then
     rm -rf /usr/src/linux-rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y
@@ -59,5 +59,12 @@ cd /usr/src/linux
 make mrproper
 if [ $? -ne 0 ]; then
   echo "Error: failed to run ' make mrproper'"
+  exit 1
+fi
+
+gzip -dc /proc/config.gz > .config
+make modules_prepare
+if [ $? -ne 0 ]; then
+  echo "Error: failed to run ' make modules_prepare'"
   exit 1
 fi
