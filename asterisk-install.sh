@@ -5,7 +5,7 @@ apt-get --yes upgrade
 apt-get --yes dist-upgrade
 
 # If we are compiling....
-#apt-get --yes -qq gcc make bc screen ncurses-dev
+apt-get --yes -qq install gcc make bc screen ncurses-dev
 apt-get --yes -qq install automake
 
 #-------------------------------------------------#
