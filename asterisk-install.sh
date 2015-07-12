@@ -46,7 +46,7 @@ if [ -f "/usr/src/rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y.tar.gz" ]; t
   rm -f /usr/src/rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y.tar.gz
 fi
 
-if [ -d "/usr/src/linux-rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y" ]; then
+if [ ! -d "/usr/src/linux-rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y" ]; then
   echo "Error: could not find the kernel source path"
   exit 1
 fi
