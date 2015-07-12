@@ -97,3 +97,7 @@ fi
 
 cd /usr/src/asterisk-chan-dongle-master
 aclocal && autoconf && automake -a
+/usr/src/asterisk-chan-dongle-master/configure
+
+make
+make install
