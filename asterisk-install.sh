@@ -4,9 +4,13 @@ apt-get --yes update
 apt-get --yes upgrade
 apt-get --yes dist-upgrade
 
+apt-get --yes -qq install asterisk
+
 # If we are compiling....
 apt-get --yes -qq install gcc make bc screen ncurses-dev
 apt-get --yes -qq install automake
+
+apt-get --yes -qq install asterisk-dev
 
 #-------------------------------------------------#
 #              Raspberry PI Kernel                #
@@ -52,8 +56,12 @@ if [ ! -d "/usr/src/linux-rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y" ]; 
 fi
   
 mv /usr/src/linux-rpi-$KERNEL_VERSION_MAJOR.$KERNEL_VERSION_MINOR.y /usr/src/linux
-ln -s /usr/src/linux /lib/modules/$(uname -r)/build
 
+if [ -L /lib/modules/$(uname -r)/build ]; then
+  rm -f /lib/modules/$(uname -r)/build
+fi
+
+ln -s /usr/src/linux /lib/modules/$(uname -r)/build
 
 cd /usr/src/linux
 make mrproper
@@ -68,3 +76,24 @@ if [ $? -ne 0 ]; then
   echo "Error: failed to run ' make modules_prepare'"
   exit 1
 fi
+
+
+# ----------------------------------
+
+if [ -f /usr/src/asterisk-chan-dongle.zip ]; then
+  rm -f /usr/src/asterisk-chan-dongle.zip
+fi
+
+if [ ! -d /usr/src/asterisk-chan-dongle ]; then
+  wget https://github.com/bg111/asterisk-chan-dongle/archive/master.zip -O /usr/src/asterisk-chan-dongle.zip
+  if [ $? -ne 0 ]; then
+    echo "Error: failed to download asterisk-chan-dongle"
+    exit 1
+  fi
+
+  cd /usr/src
+  unzip asterisk-chan-dongle.zip
+fi
+
+cd /usr/src/asterisk-chan-dongle-master
+aclocal && autoconf && automake -a
